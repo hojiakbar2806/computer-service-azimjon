@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>So'rov Yaratish - Dern Support</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#1e40af',
+                        'secondary': '#3b82f6',
+                        'accent': '#06b6d4',
+                        'success': '#10b981',
+                        'warning': '#f59e0b',
+                        'danger': '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .input-field {
+            background: white;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-primary {
+            background: #1e40af;
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            z-index: 1000;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-240px);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-900 min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                    <i class="fas fa-tools text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900">Dern Support</h1>
+                    <p class="text-xs text-gray-500">Professional Xizmatlar</p>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="card rounded-lg p-4 mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>
+                    <div>
+                        <div id="userWelcome" class="text-gray-900 font-medium text-sm"></div>
+                        <div id="userRole" class="text-xs text-primary uppercase font-semibold"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="space-y-1" id="sidebarNav">
+                <!-- Navigation items will be populated by JavaScript -->
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="absolute bottom-6 left-6 right-6">
+                <button onclick="logout()"
+                    class="w-full bg-gray-100 hover:bg-gray-200 px-4 py-3 rounded-lg text-gray-700 font-medium transition-colors">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Chiqish
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content min-h-screen">
+        <!-- Top Bar -->
+        <div class="bg-white border-b border-gray-200 p-4">
+            <div class="flex justify-between items-center">
+                <button id="sidebarToggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100">
+                    <i class="fas fa-bars text-gray-700"></i>
+                </button>
+                <div class="hidden md:block">
+                    <button id="sidebarCollapseToggle" class="p-2 rounded-lg hover:bg-gray-100">
+                        <i class="fas fa-bars text-gray-700"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="p-6">
+            <!-- Header -->
+            <div class="mb-8">
+                <div class="card rounded-lg p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-900 mb-2">Yangi Xizmat So'rovi</h1>
+                            <p class="text-gray-600">Qurilmangiz uchun yangi ta'mirlash so'rovi yarating</p>
+                        </div>
+                        <div class="hidden md:block">
+                            <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-plus-circle text-primary text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <div class="card rounded-lg p-8">
+                <form id="dashboardServiceRequestForm" class="space-y-6">
+                    <input type="hidden" id="fullName" name="fullName">
+                    <input type="hidden" id="email" name="email">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="dashboardDeviceModel" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-mobile-alt text-primary mr-2"></i>Qurilma Modeli *
+                            </label>
+                            <input type="text" id="dashboardDeviceModel" name="device_model" required
+                                placeholder="masalan: iPhone 13, Samsung Galaxy S21"
+                                class="input-field w-full px-3 py-2 rounded-lg">
+                        </div>
+                        <div>
+                            <label for="dashboardIssueType" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-exclamation-triangle text-primary mr-2"></i>Muammo Turi *
+                            </label>
+                            <select id="dashboardIssueType" name="issue_type" required
+                                class="input-field w-full px-3 py-2 rounded-lg">
+                                <option value="">Muammo turini tanlang</option>
+                                <option value="hardware">Apparat Muammosi</option>
+                                <option value="software">Dasturiy Muammo</option>
+                                <option value="other">Boshqa</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="dashboardProblemArea" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-crosshairs text-primary mr-2"></i>Muammo Joyi
+                            </label>
+                            <input type="text" id="dashboardProblemArea" name="problem_area"
+                                placeholder="masalan: Ekran, Batareya, Quvvat Porti"
+                                class="input-field w-full px-3 py-2 rounded-lg">
+                        </div>
+                        <div>
+                            <label for="dashboardLocation" class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-map-marker-alt text-primary mr-2"></i>Joylashuv *
+                            </label>
+                            <select id="dashboardLocation" name="location" required
+                                class="input-field w-full px-3 py-2 rounded-lg">
+                                <option value="">Joyni tanlang</option>
+                                <option value="Sergili">Sergili</option>
+                                <option value="Yunusobod">Yunusobod</option>
+                                <option value="Shayxontohur">Shayxontohur</option>
+                                <option value="Olmazor">Olmazor</option>
+                                <option value="Uchtepa">Uchtepa</option>
+                                <option value="Yakkasaroy">Yakkasaroy</option>
+                                <option value="Yangihayot">Yangihayot</option>
+                                <option value="Mirobod">Mirobod</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="dashboardDescription" class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-file-alt text-primary mr-2"></i>Muammo Tavsifi *
+                        </label>
+                        <textarea id="dashboardDescription" name="description" rows="5" required
+                            placeholder="Muammoni batafsil tasvirlab bering..."
+                            class="input-field w-full px-3 py-2 rounded-lg resize-none"></textarea>
+                    </div>
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-semibold">
+                            <span id="submitText" class="flex items-center">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                So'rov Yuborish
+                            </span>
+                            <i id="submitLoader" class="fas fa-spinner fa-spin ml-2 hidden"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/utils.js"></script>
+    <script src="./js/request-creator.js"></script>
+    <script>
+        // Sidebar functionality
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarCollapseToggle = document.getElementById('sidebarCollapseToggle');
+
+        // Mobile sidebar toggle
+        sidebarToggle?.addEventListener('click', () => {
+            sidebar.classList.toggle('mobile-open');
+        });
+
+        // Desktop sidebar collapse
+        sidebarCollapseToggle?.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(e.target) &&
+                !sidebarToggle.contains(e.target) &&
+                sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+            }
+        });
+
+        // Update current date
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('uz-UZ', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    </script>
+</body>
+
+</html>

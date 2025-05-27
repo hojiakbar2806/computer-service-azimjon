@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boshqaruv Paneli - TechFix Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#1e40af',
+                        'secondary': '#3b82f6',
+                        'accent': '#06b6d4',
+                        'success': '#10b981',
+                        'warning': '#f59e0b',
+                        'danger': '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: #1e40af;
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 280px;
+            z-index: 1000;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-240px);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 40px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="text-gray-900 min-h-screen">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-3 mb-8">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                    <i class="fas fa-tools text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900">TechFix Pro</h1>
+                    <p class="text-xs text-gray-500">Professional Xizmatlar</p>
+                </div>
+            </div>
+
+            <!-- User Info -->
+            <div class="card rounded-lg p-4 mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-user text-gray-600"></i>
+                    </div>
+                    <div>
+                        <div id="userWelcome" class="text-gray-900 font-medium text-sm"></div>
+                        <div id="userRole" class="text-xs text-primary uppercase font-semibold"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="space-y-1" id="sidebarNav">
+                <!-- Navigation items will be populated by JavaScript -->
+            </nav>
+
+            <!-- Logout Button -->
+            <div class="absolute bottom-6 left-6 right-6">
+                <button onclick="logout()"
+                    class="w-full bg-gray-100 hover:bg-gray-200 px-4 py-3 rounded-lg text-gray-700 font-medium transition-colors">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Chiqish
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content min-h-screen">
+        <!-- Top Bar -->
+        <div class="bg-white border-b border-gray-200 p-4">
+            <div class="flex justify-between items-center">
+                <button id="sidebarToggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100">
+                    <i class="fas fa-bars text-gray-700"></i>
+                </button>
+                <div class="hidden md:block">
+                    <button id="sidebarCollapseToggle" class="p-2 rounded-lg hover:bg-gray-100">
+                        <i class="fas fa-bars text-gray-700"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="p-6">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Boshqaruv Paneli</h1>
+                <p class="text-gray-600">Ta'mirlash xizmatlari faoliyatining umumiy ko'rinishi</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div id="dashboardContent" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"></div>
+
+            <!-- Charts -->
+            <div id="chartContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"></div>
+
+            <!-- Requests Table -->
+            <div class="card rounded-lg p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold text-gray-900 flex items-center">
+                        <i class="fas fa-list-alt text-primary mr-3"></i>
+                        Xizmat So'rovlari
+                    </h2>
+                    <a href="create-request.html"
+                        class="btn-primary px-4 py-2 rounded-lg font-medium inline-flex items-center">
+                        <i class="fas fa-plus mr-2"></i>Yangi So'rov
+                    </a>
+                </div>
+                <div id="requestsList">
+                    <!-- Requests will be loaded here -->
+                    <div class="text-center py-8">
+                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-spinner fa-spin text-gray-400 text-xl"></i>
+                        </div>
+                        <p class="text-gray-500">So'rovlar yuklanmoqda...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Request Modal -->
+    <div id="updateRequestModal" class="modal">
+        <div id="updateRequestContent"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="modal" style="background-color: rgba(0, 0, 0, 0.3);">
+        <div class="flex items-center justify-center">
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/utils.js"></script>
+    <script src="./js/request-handler.js"></script>
+    <script>
+        // Global modal functions
+        function hideUpdateModal() {
+            const modal = document.getElementById('updateRequestModal');
+            if (modal) {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function hideConfirmationModal() {
+            const modal = document.getElementById('confirmationModal');
+            if (modal) {
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function showLoadingOverlay() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function hideLoadingOverlay() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Close modals when clicking outside
+        document.addEventListener('click', (e) => {
+            const updateModal = document.getElementById('updateRequestModal');
+            const confirmModal = document.getElementById('confirmationModal');
+
+            if (e.target === updateModal) {
+                hideUpdateModal();
+            }
+            if (e.target === confirmModal) {
+                hideConfirmationModal();
+            }
+        });
+
+        // Escape key to close modals
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideUpdateModal();
+                hideConfirmationModal();
+            }
+        });
+
+        // Dashboard Manager
+        class DashboardManager {
+            constructor() {
+                this.user = null;
+                this.stats = null;
+                this.init();
+            }
+
+            async init() {
+                try {
+                    showLoadingOverlay();
+                    this.user = await window.initPage('dashboard');
+                    await this.loadStats();
+                    await this.renderDashboard();
+                    await this.loadRequests();
+                } catch (error) {
+                    console.error('Dashboard ishga tushirish xatosi:', error);
+                    window.showNotification('Dashboard yuklanishida xatolik', 'error');
+                } finally {
+                    hideLoadingOverlay();
+                }
+            }
+
+            async loadStats() {
+                try {
+                    this.stats = await window.api('/stats/requests');
+                } catch (error) {
+                    console.log('Statistika yuklashda xatolik:', error);
+                    this.stats = {
+                        total_requests: 0,
+                        pending_requests: 0,
+                        in_progress_requests: 0,
+                        completed_requests: 0
+                    };
+                    window.showNotification('Statistika vaqtincha mavjud emas', 'warning');
+                }
+            }
+
+            async renderDashboard() {
+                this.renderStatsCards();
+
+                if (this.user.role === 'manager') {
+                    await this.renderCharts();
+                }
+            }
+
+            renderStatsCards() {
+                const container = document.getElementById('dashboardContent');
+                if (!container) return;
+
+                const cards = [
+                    {
+                        title: 'JAMI SO\'ROVLAR',
+                        value: this.stats.total_requests || 0,
+                        icon: 'fa-clipboard-list',
+                        bgColor: 'bg-blue-50',
+                        iconColor: 'text-blue-600',
+                        borderColor: 'border-blue-200'
+                    },
+                    {
+                        title: 'KUTILAYOTGAN',
+                        value: this.stats.pending_requests || 0,
+                        icon: 'fa-hourglass-half',
+                        bgColor: 'bg-yellow-50',
+                        iconColor: 'text-yellow-600',
+                        borderColor: 'border-yellow-200'
+                    },
+                    {
+                        title: 'JARAYONDA',
+                        value: this.stats.in_progress_requests || 0,
+                        icon: 'fa-cogs',
+                        bgColor: 'bg-purple-50',
+                        iconColor: 'text-purple-600',
+                        borderColor: 'border-purple-200'
+                    },
+                    {
+                        title: 'TUGALLANGAN',
+                        value: this.stats.completed_requests || 0,
+                        icon: 'fa-check-circle',
+                        bgColor: 'bg-green-50',
+                        iconColor: 'text-green-600',
+                        borderColor: 'border-green-200'
+                    }
+                ];
+
+                container.innerHTML = cards.map(card => `
+                    <div class="card rounded-lg p-6 ${card.bgColor} border ${card.borderColor} hover:shadow-lg transition-shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wider">${card.title}</h3>
+                                <p class="text-3xl font-bold text-gray-900">${card.value}</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-lg ${card.bgColor} flex items-center justify-center border ${card.borderColor}">
+                                <i class="fas ${card.icon} ${card.iconColor} text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            async renderCharts() {
+                const chartContainer = document.getElementById('chartContainer');
+                if (!chartContainer || !window.Chart) return;
+
+                try {
+                    const [locations, serviceRequests] = await Promise.all([
+                        window.api('/stats/locations').catch(() => []),
+                        window.api('/service-request').catch(() => [])
+                    ]);
+
+                    this.setupChartContainer(chartContainer);
+                    this.renderIssueTypesChart(serviceRequests);
+                    this.renderLocationChart(locations);
+                } catch (error) {
+                    console.error('Diagramma chizishda xatolik:', error);
+                    window.showNotification('Analitika vaqtincha mavjud emas', 'warning');
+                    chartContainer.innerHTML = '';
+                }
+            }
+
+            setupChartContainer(container) {
+                container.innerHTML = `
+                    <div class="card rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+                                <i class="fas fa-chart-pie text-primary mr-3"></i>
+                                Muammo Turlari Analitikasi
+                            </h3>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+                            <canvas id="issueTypesChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+                                <i class="fas fa-map-marker-alt text-primary mr-3"></i>
+                                Joylashuv Ma'lumotlari
+                            </h3>
+                        </div>
+                        <div class="chart-container" style="position: relative; height: 300px; width: 100%;">
+                            <canvas id="locationChart"></canvas>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderIssueTypesChart(serviceRequests) {
+                const issueTypeData = Object.values(
+                    serviceRequests.reduce((acc, issue) => {
+                        const key = issue.issue_type || 'Noma\'lum';
+                        if (!acc[key]) {
+                            acc[key] = { issue_type: key, count: 0 };
+                        }
+                        acc[key].count += 1;
+                        return acc;
+                    }, {})
+                );
+
+                const ctx = document.getElementById('issueTypesChart');
+                if (!ctx) return;
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: issueTypeData.map(item => item.issue_type),
+                        datasets: [{
+                            data: issueTypeData.map(item => item.count),
+                            backgroundColor: ['#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#10b981'],
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: '#374151',
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    font: { size: 12, weight: '500' }
+                                }
+                            }
+                        },
+                        cutout: '60%'
+                    }
+                });
+            }
+
+            renderLocationChart(locationData) {
+                const ctx = document.getElementById('locationChart');
+                if (!ctx) return;
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: locationData.map(d => d.source || d.location || 'Noma\'lum'),
+                        datasets: [{
+                            label: 'So\'rovlar',
+                            data: locationData.map(d => d.count || 0),
+                            backgroundColor: '#3b82f6',
+                            borderColor: '#1e40af',
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                ticks: { color: '#6b7280', font: { size: 11 } },
+                                grid: { color: '#f3f4f6' }
+                            },
+                            y: {
+                                ticks: { color: '#6b7280', font: { size: 11 } },
+                                grid: { color: '#f3f4f6' },
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            async loadRequests() {
+                if (window.requestHandler) {
+                    await window.requestHandler.displayRequests(this.user);
+                }
+            }
+        }
+
+        // Sidebar functionality
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarCollapseToggle = document.getElementById('sidebarCollapseToggle');
+
+        // Mobile sidebar toggle
+        sidebarToggle?.addEventListener('click', () => {
+            sidebar.classList.toggle('mobile-open');
+        });
+
+        // Desktop sidebar collapse
+        sidebarCollapseToggle?.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768 &&
+                !sidebar.contains(e.target) &&
+                !sidebarToggle.contains(e.target) &&
+                sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+            }
+        });
+
+        // Initialize Dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new DashboardManager();
+        });
+    </script>
+</body>
+
+</html>

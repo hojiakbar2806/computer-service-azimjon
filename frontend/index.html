@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dern Support - Professional Qurilma Ta'mirlash Xizmatlari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#1e40af',
+                        'secondary': '#3b82f6',
+                        'accent': '#06b6d4',
+                        'success': '#10b981',
+                        'warning': '#f59e0b',
+                        'danger': '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-field {
+            background: white;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-primary {
+            background: #1e40af;
+            color: white;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body class="text-gray-900 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-tools text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">Dern Support</h1>
+                        <p class="text-xs text-gray-500">Professional Ta'mirlash Xizmatlari</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="login.html" class="text-gray-600 hover:text-gray-900 font-medium">Kirish</a>
+                    <a href="dashboard.html" class="btn-primary px-4 py-2 rounded-lg font-medium">
+                        Boshqaruv Paneli
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+                    Professional Qurilma
+                    <span class="text-primary">Ta'mirlash Xizmatlari</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                    Malakali mutaxassislar, sifatli ehtiyot qismlar va ishonchli xizmat.
+                    Tez bajarilish muddati va to'liq kafolat bilan barcha qurilmalaringizni ta'mirlaymiz.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="openRepairModal()" class="btn-primary px-8 py-3 rounded-lg font-semibold text-lg">
+                        Ta'mirlash So'rovi Yuborish
+                    </button>
+                    <a href="register.html"
+                        class="bg-gray-100 text-gray-900 px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-200 transition-colors">
+                        Hisob Yaratish
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Bizning Xizmatlarimiz</h2>
+                <p class="text-xl text-gray-600">Barcha turdagi qurilmalar uchun professional ta'mirlash xizmatlari</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card rounded-lg p-8 text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-mobile-alt text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Mobil Qurilmalar</h3>
+                    <p class="text-gray-600 mb-6">Ekran almashtirish, batareya ta'mirlash, suv zararini tiklash va
+                        boshqa xizmatlar</p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li>• iPhone va Android telefonlar</li>
+                        <li>• Ekran va sensorlar</li>
+                        <li>• Batareya almashtirish</li>
+                        <li>• Suv zararini tiklash</li>
+                    </ul>
+                </div>
+
+                <div class="card rounded-lg p-8 text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-laptop text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Noutbuk va Kompyuterlar</h3>
+                    <p class="text-gray-600 mb-6">Apparat yangilash, dasturiy ta'minot muammolarini hal qilish, virus
+                        tozalash</p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li>• Apparat ta'mirlash</li>
+                        <li>• Dasturiy ta'minot o'rnatish</li>
+                        <li>• Virus tozalash</li>
+                        <li>• Ma'lumotlarni tiklash</li>
+                    </ul>
+                </div>
+
+                <div class="card rounded-lg p-8 text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-tablet-alt text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Planshet va iPad</h3>
+                    <p class="text-gray-600 mb-6">Sensorli ekran ta'mirlash, quvvat portini tuzatish, ishlashni
+                        optimallashtirish</p>
+                    <ul class="text-sm text-gray-500 space-y-2">
+                        <li>• Ekran va sensor</li>
+                        <li>• Quvvat porti</li>
+                        <li>• Batareya muammolari</li>
+                        <li>• Dasturiy yangilash</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="bg-gray-50 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Qanday Ishlaydi</h2>
+                <p class="text-xl text-gray-600">Oddiy 4 bosqichda qurilmangizni ta'mirlang</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-paper-plane text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">So'rov Yuborish</h3>
+                    <p class="text-gray-600">Qurilma ma'lumotlari va muammo tavsifi bilan ta'mirlash so'rovini
+                        to'ldiring</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-check text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Ma'lumotlar Olish</h3>
+                    <p class="text-gray-600">Ta'mirlash jarayonini kuzatish uchun email orqali xavfsiz kirish
+                        ma'lumotlarini oling</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-line text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Jarayonni Kuzatish</h3>
+                    <p class="text-gray-600">Shaxsiy boshqaruv panelingiz orqali ta'mirlash holatini real vaqtda
+                        kuzating</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-check-circle text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Qurilma Tayyor</h3>
+                    <p class="text-gray-600">To'liq kafolat bilan ta'mirlangan qurilmangizni oling</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-center space-x-3 mb-8">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+                    <i class="fas fa-tools text-white"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold text-gray-900">Dern Support</span>
+                    <p class="text-gray-600 text-sm">Professional Ta'mirlash Xizmatlari</p>
+                </div>
+            </div>
+            <div class="text-center">
+                <p class="text-gray-500">© 2025 Dern Support. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Repair Request Modal -->
+    <div id="repairModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Ta'mirlash So'rovi</h2>
+                <button onclick="closeRepairModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <form id="serviceRequestForm" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            To'liq Ism *
+                        </label>
+                        <input type="text" name="fullName" required class="input-field w-full px-3 py-2 rounded-lg"
+                            placeholder="Ismingizni kiriting">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Email Manzil *
+                        </label>
+                        <input type="email" name="email" required class="input-field w-full px-3 py-2 rounded-lg"
+                            placeholder="sizning@email.com">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Qurilma Modeli *
+                        </label>
+                        <input type="text" name="device_model" required class="input-field w-full px-3 py-2 rounded-lg"
+                            placeholder="iPhone 15 Pro, Galaxy S24">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Muammo Turi *
+                        </label>
+                        <select name="issue_type" required class="input-field w-full px-3 py-2 rounded-lg">
+                            <option value="">Muammo turini tanlang</option>
+                            <option value="hardware">Apparat Muammosi</option>
+                            <option value="software">Dasturiy Muammo</option>
+                            <option value="other">Boshqa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Muammo Joyi
+                        </label>
+                        <input type="text" name="problem_area" class="input-field w-full px-3 py-2 rounded-lg"
+                            placeholder="Ekran, Batareya, Kamera">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Joylashuv *
+                        </label>
+                        <select name="location" required class="input-field w-full px-3 py-2 rounded-lg">
+                            <option value="">Joyni tanlang</option>
+                            <option value="Sergili">Sergili</option>
+                            <option value="Yunusobod">Yunusobod</option>
+                            <option value="Shayxontohur">Shayxontohur</option>
+                            <option value="Olmazor">Olmazor</option>
+                            <option value="Uchtepa">Uchtepa</option>
+                            <option value="Yakkasaroy">Yakkasaroy</option>
+                            <option value="Yangihayot">Yangihayot</option>
+                            <option value="Mirobod">Mirobod</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Muammo Tavsifi *
+                    </label>
+                    <textarea name="description" rows="4" required
+                        class="input-field w-full px-3 py-2 rounded-lg resize-none"
+                        placeholder="Muammoni batafsil tasvirlab bering..."></textarea>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <input type="checkbox" name="terms" required
+                        class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                    <label class="text-sm text-gray-600">
+                        Men <span class="text-primary hover:underline cursor-pointer">xizmat shartlari</span>ga roziman
+                    </label>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="btn-primary w-full py-3 rounded-lg font-semibold">
+                        <span id="submitText">
+                            So'rov Yuborish
+                        </span>
+                        <i id="submitLoader" class="fas fa-spinner fa-spin ml-2 hidden"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="./js/utils.js"></script>
+    <script src="./js/home.js"></script>
+    <script>
+        function openRepairModal() {
+            document.getElementById('repairModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRepairModal() {
+            document.getElementById('repairModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('repairModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeRepairModal();
+            }
+        });
+    </script>
+</body>
+
+</html>
