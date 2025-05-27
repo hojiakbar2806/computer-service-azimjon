@@ -47,7 +47,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 connect().then(() => {
-  server.listen(8003, () => {
+  server.listen(8004, () => {
     console.log('Server running');
   });
 });
